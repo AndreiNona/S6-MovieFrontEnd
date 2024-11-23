@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import MovieList from '@/components/MovieList.vue';
+//import MovieList from '@/components/MovieList.vue';
 import LoginRegister from '@/components/LoginRegister.vue';
 import ActorView from '@/views/ActorView.vue';
 import DirectorView from '@/views/DirectorView.vue';
+import MovieView from '@/views/MovieView.vue';
+
 
 
 const routes = [
@@ -14,7 +16,7 @@ const routes = [
   {
     path: '/movies',
     name: 'Movies',
-    component: MovieList,
+    component: MovieView,
   },
   {
     path: '/actors',
@@ -25,7 +27,7 @@ const routes = [
     path: '/directors',
     name: 'Directors',
     component: DirectorView,
-  },
+  }
 ];
 
 const router = createRouter({
