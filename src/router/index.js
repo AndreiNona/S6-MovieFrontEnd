@@ -1,33 +1,30 @@
 import { createRouter, createWebHistory } from 'vue-router';
-//import MovieList from '@/components/MovieList.vue';
 import LoginRegister from '@/components/LoginRegister.vue';
-import ActorView from '@/views/ActorView.vue';
+import PeopleView from '@/views/PeopleView.vue';
 import DirectorView from '@/views/DirectorView.vue';
 import MovieView from '@/views/MovieView.vue';
-
-
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: LoginRegister,  // Add the Login/Register view as the home page
+    component: LoginRegister, // Home page for login/register
   },
   {
     path: '/movies',
     name: 'Movies',
-    component: MovieView,
+    component: MovieView, // Movie search and list
   },
   {
-    path: '/actors',
-    name: 'Actors',
-    component: ActorView,
+    path: '/people',
+    name: 'People',
+    component: PeopleView, // People search and list (was ActorView)
   },
   {
     path: '/directors',
     name: 'Directors',
-    component: DirectorView,
-  }
+    component: DirectorView, // Director-related features
+  },
 ];
 
 const router = createRouter({

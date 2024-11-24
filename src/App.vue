@@ -5,7 +5,7 @@
       <v-toolbar-title>Movie Enthusiast</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn text to="/movies" v-bind="$router-link">Movies</v-btn>
-      <v-btn text to="/actors" v-bind="$router-link">Actors</v-btn>
+      <v-btn text to="/people" v-bind="$router-link">Talents</v-btn>
       <v-btn text to="/directors" v-bind="$router-link">Directors</v-btn>
 
       <!-- Login/Logout Button -->
