@@ -28,7 +28,7 @@ const routes = [
     meta: { requiresAuth: true },  
   },
   {
-    path: "/toplist/edit",
+    path: '/toplist/:id/edit',
     name: "TopListEdit",
     component: TopListEditView,
     props: true, // Pass route parameters as props

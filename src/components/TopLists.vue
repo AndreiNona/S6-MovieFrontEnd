@@ -15,7 +15,7 @@
             <v-btn
               icon
               class="delete-button"
-              @click="deleteTopList(index)"
+              @click="confirmDeleteTopList(topList.id)"
             >
               <v-icon>mdi-close</v-icon>
             </v-btn>
@@ -79,7 +79,6 @@
               const data = await response.json();
               topList.movieTitles.push(data.title);
   
-              
               if (data.poster && data.poster !== "N/A") {
                 topList.movies.push(data);
               }
@@ -88,7 +87,6 @@
             }
           }
   
-          
           if (topList.movies.length === 0) {
             topList.movies.push({ poster: "/images/noPoserAvailable.png" });
           }
@@ -98,9 +96,6 @@
       getMoviePoster(movie) {
         return movie.poster || "/images/noPoserAvailable.png";
       },
-      deleteTopList(index) {
-        this.$emit("delete-toplist", index);
-      },
       navigateToMovies() {
         this.$router.push("/movies");
       },
@@ -108,9 +103,29 @@
         this.$router.push({
           name: "TopListEdit",
           params: {
-            id: topList.id, 
+            id: topList.id,
           },
         });
+      },
+      confirmDeleteTopList(topListId) {
+        if (confirm("Are you sure you want to delete this top list?")) {
+          this.deleteTopList(topListId);
+        }
+      },
+      async deleteTopList(topListId) {
+        try {
+          await fetch(`http://localhost:5205/api/toplist/${topListId}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+            },
+          });
+          this.$emit("delete-toplist", topListId);
+          alert("Top list deleted successfully.");
+        } catch (error) {
+          console.error("Error deleting top list:", error);
+          alert("Failed to delete top list. Please try again.");
+        }
       },
     },
     async mounted() {
@@ -119,6 +134,7 @@
     },
   };
   </script>
+  
   
   <style scoped>
   .top-list-card {
@@ -139,14 +155,14 @@
     margin-bottom: 10px;
     position: relative;
     overflow: hidden;
-    height: 200px; 
-    width: 100%; 
+    height: 200px;
+    width: 100%;
   }
   
   .movie-poster {
     width: 100%;
     height: 100%;
-    object-fit: contain; 
+    object-fit: contain;
     position: absolute;
     animation: slide-in 0.5s ease-out forwards;
   }
@@ -165,11 +181,11 @@
   .delete-button {
     position: absolute;
     top: 10px;
-    right: 10px; 
+    right: 10px;
     background-color: white;
     border-radius: 50%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    z-index: 10; 
+    z-index: 10;
   }
   
   .bottom-actions {
@@ -179,7 +195,7 @@
   }
   
   .bottom-actions .v-btn:last-child {
-    margin-left: auto; 
+    margin-left: auto;
   }
   
   .total-movies {
@@ -193,3 +209,4 @@
     color: gray;
   }
   </style>
+  

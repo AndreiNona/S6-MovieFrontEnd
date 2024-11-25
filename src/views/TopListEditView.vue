@@ -117,7 +117,7 @@
       try {
         const { id } = this.$route.params;
   
-        
+        // Fetch top list details
         const response = await axios.get(`http://localhost:5205/api/toplist/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -128,7 +128,7 @@
         this.topListName = topList.name;
         this.movieIds = topList.movieIds;
   
-        
+        // Fetch details for movies in the list
         await this.fetchMovieDetails();
       } catch (error) {
         console.error("Error fetching top list details:", error);
