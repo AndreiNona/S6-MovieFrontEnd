@@ -6,7 +6,7 @@
       <v-spacer></v-spacer>
       <v-btn text to="/movies" v-bind="$router-link">Movies</v-btn>
       <v-btn text to="/people" v-bind="$router-link">Talents</v-btn>
-      <v-btn text to="/directors" v-bind="$router-link">Directors</v-btn>
+      <v-btn text to="/profile" v-bind="$router-link">Profile</v-btn>
 
       <!-- Login/Logout Button -->
       <v-btn v-if="!isAuthenticated" text @click="dialog = true">Login</v-btn>
@@ -81,7 +81,7 @@ export default {
       }
     };
 
-    // Check if the user is authenticated when the app is mounted
+    
     onMounted(() => {
       const token = localStorage.getItem('jwtToken');
       if (token) {
@@ -101,5 +101,5 @@ export default {
 </script>
 
 <style scoped>
-/* Add styles if needed */
+
 </style>

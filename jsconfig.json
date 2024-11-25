@@ -17,6 +17,7 @@
     ]
   },
   "exclude": [
-    "src/components/TestPicker.vue" // Explicitly exclude the file (TODO: fully remove it)
+    "src/components/TestPicker.vue", // Explicitly exclude the file (TODO: fully remove it)
+    "src/components/HelloWorld.vue" // Explicitly exclude the file (TODO: fully remove it)
   ]
 }
