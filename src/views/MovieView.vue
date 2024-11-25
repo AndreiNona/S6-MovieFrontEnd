@@ -109,13 +109,14 @@
                       md="4"
                       lg="3"
                     >
-                      <MovieCard
-                        :title="movie.title"
-                        :genre="movie.genre || 'N/A'"
-                        :year="movie.year"
-                        :rating="getMovieRating(movie)"
-                        :poster="movie.poster || ''" 
-                      />
+                    <MovieCard
+                    :title="movie.title"
+                    :genre="movie.genre || 'N/A'"
+                    :year="movie.year"
+                    :rating="getMovieRating(movie)"
+                    :poster="movie.poster || ''"
+                    :movieId="movie.id" 
+                  />
                     </v-col>
                   </v-row>
     </v-container>

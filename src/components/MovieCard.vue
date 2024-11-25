@@ -18,14 +18,38 @@
 
     <!-- Add to Top List Button -->
     <v-card-actions>
-      <v-btn color="success" block @click="$emit('add-to-toplist')">
+      <v-btn color="success" block @click="fetchUserTopLists">
         Add to Top List
       </v-btn>
     </v-card-actions>
+
+    <!-- Dialog for Selecting Top List -->
+    <v-dialog v-model="topListDialog" max-width="400">
+      <v-card>
+        <v-card-title>Select a Top List</v-card-title>
+        <v-card-text>
+          <v-list>
+            <v-list-item
+              v-for="topList in userTopLists"
+              :key="topList.id"
+              @click="addMovieToTopList(topList)"
+              class="top-list-item"
+            >
+              {{ topList.name }}
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn text color="error" @click="topListDialog = false">Cancel</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "MovieCard",
   props: {
@@ -47,8 +71,18 @@ export default {
     },
     poster: {
       type: String,
-      default: null, // Allows handling missing poster URLs
+      default: null,
     },
+    movieId: {
+      type: Number,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      topListDialog: false,
+      userTopLists: [],
+    };
   },
   computed: {
     defaultPoster() {
@@ -58,6 +92,46 @@ export default {
   methods: {
     isValidPoster(poster) {
       return poster && poster !== "N/A";
+    },
+    async fetchUserTopLists() {
+      try {
+        const response = await axios.get("http://localhost:5205/api/toplist/my-toplists", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          },
+        });
+        this.userTopLists = response.data;
+        this.topListDialog = true; // Open the dialog
+      } catch (error) {
+        console.error("Error fetching user top lists:", error);
+        alert("Failed to load top lists. Please try again.");
+      }
+    },
+    async addMovieToTopList(topList) {
+      // Check if the movie is already in the top list
+      if (topList.movieIds.includes(this.movieId)) {
+        alert(`"${this.title}" is already in "${topList.name}"`);
+        return;
+      }
+
+      try {
+        await axios.put(
+          `http://localhost:5205/api/toplist/${topList.id}/update`,
+          {
+            movieIds: [...topList.movieIds, this.movieId], 
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+            },
+          }
+        );
+        alert(`"${this.title}" added to "${topList.name}" successfully!`);
+        this.topListDialog = false;
+      } catch (error) {
+        console.error("Error adding movie to top list:", error);
+        alert("Failed to add movie to top list. Please try again.");
+      }
     },
   },
 };
