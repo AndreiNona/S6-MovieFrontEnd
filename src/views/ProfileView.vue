@@ -17,7 +17,7 @@
       <TopLists 
         v-else 
         :topLists="topLists" 
-        @remove="removeTopList" 
+        @delete-toplist="fetchTopLists" 
         @edit="editTopList" 
       />
     </div>
@@ -59,17 +59,15 @@ export default {
       username: "User", 
       topLists: [],
       isLoadingTopLists: true, 
-      createTopListDialog: false, // Controls the dialog visibility
-      newTopListName: "", // Stores the name for the new top list
+      createTopListDialog: false, 
+      newTopListName: "", 
     };
   },
   async mounted() {
-    // Fetch username from the JWT token
     const token = localStorage.getItem("jwtToken");
     if (token) {
       try {
         const decodedToken = JSON.parse(atob(token.split(".")[1])); 
-        console.log(decodedToken)
         this.username = decodedToken.sub || "User"; 
       } catch (error) {
         console.error("Error decoding JWT token:", error);
@@ -77,71 +75,89 @@ export default {
       }
     }
 
-    // Fetch existing top lists
-    try {
-      const response = await axios.get("http://localhost:5205/api/toplist/my-toplists", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-        },
-      });
-      this.topLists = response.data;
-    } catch (error) {
-      console.error("Error fetching top lists:", error);
-    } finally {
-      this.isLoadingTopLists = false; 
-    }
+    await this.fetchTopLists();
   },
   methods: {
-    removeTopList(index) {
-      this.topLists.splice(index, 1);
-    },
-    editTopList(topListName) {
-      console.log(`Editing top list: ${topListName}`);
+    async fetchTopLists() {
+      try {
+        this.isLoadingTopLists = true;
+        const response = await axios.get("http://localhost:5205/api/toplist/my-toplists", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          },
+        });
+        this.topLists = response.data;
+      } catch (error) {
+        console.error("Error fetching top lists:", error);
+      } finally {
+        this.isLoadingTopLists = false;
+      }
     },
     openCreateTopListDialog() {
       this.createTopListDialog = true;
     },
     closeCreateTopListDialog() {
       this.createTopListDialog = false;
-      this.newTopListName = ""; // Reset input field
+      this.newTopListName = ""; 
     },
     async createTopList() {
-    if (!this.newTopListName) {
-      alert("Top List name cannot be empty!");
-      return;
-    }
+      if (!this.newTopListName) {
+        alert("Top List name cannot be empty!");
+        return;
+      }
 
-    try {
-      const response = await axios.post(
-        "http://localhost:5205/api/toplist/create",
-        {
-          name: this.newTopListName,
-          movieIds: [], // Ensure the API receives an empty movieIds array
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+      try {
+        const response = await axios.post(
+          "http://localhost:5205/api/toplist/create",
+          {
+            name: this.newTopListName,
+            movieIds: [], 
           },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+            },
+          }
+        );
+
+        this.topLists.push({
+          ...response.data,
+          movieIds: response.data.movieIds || [], 
+          movies: [], 
+        });
+
+        alert("Top List created successfully!");
+        this.closeCreateTopListDialog();
+      } catch (error) {
+        console.error("Error creating top list:", error);
+        alert("Failed to create Top List. Please try again.");
+      }
+    },
+    async removeTopList(index) {
+      try {
+        const topList = this.topLists[index];
+        const confirmDelete = confirm(`Are you sure you want to delete "${topList.name}"?`);
+        if (confirmDelete) {
+          await axios.delete(`http://localhost:5205/api/toplist/${topList.id}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+            },
+          });
+          this.fetchTopLists(); 
+          alert("Top List deleted successfully!");
         }
-      );
-
-      // Add the new top list with initialized properties to avoid runtime errors
-      this.topLists.push({
-        ...response.data,
-        movieIds: response.data.movieIds || [], // Ensure movieIds is an array
-        movies: [], // Prepare for fetched movie details if necessary
-      });
-
-      alert("Top List created successfully!");
-      this.closeCreateTopListDialog();
-    } catch (error) {
-      console.error("Error creating top list:", error);
-      alert("Failed to create Top List. Please try again.");
-    }
-  },
+      } catch (error) {
+        console.error("Error deleting top list:", error);
+        alert("Failed to delete Top List. Please try again.");
+      }
+    },
+    editTopList(topListId) {
+      this.$router.push({ name: "TopListEdit", params: { id: topListId } });
+    },
   },
 };
 </script>
+
 
 <style scoped>
 .loading-message {
