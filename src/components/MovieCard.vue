@@ -1,12 +1,17 @@
 <template>
   <v-card class="movie-card" outlined>
-    <!-- Poster Image -->
-    <v-img
-      class="movie-poster"
-      :src="isValidPoster(poster) ? poster : defaultPoster"
-      alt="Movie Poster"
-      contain
-    ></v-img>
+    <!-- Poster Image (Clickable for Movie Details) -->
+    <router-link
+      :to="{ name: 'MovieDetails', params: { id: movieId } }"
+      class="movie-poster-link"
+    >
+      <v-img
+        class="movie-poster"
+        :src="isValidPoster(poster) ? poster : defaultPoster"
+        alt="Movie Poster"
+        contain
+      ></v-img>
+    </router-link>
 
     <!-- Movie Details -->
     <v-card-title class="movie-title">{{ title }}</v-card-title>
@@ -18,7 +23,11 @@
 
     <!-- Add to Top List Button -->
     <v-card-actions>
-      <v-btn color="success" block @click="fetchUserTopLists">
+      <v-btn
+        color="success"
+        block
+        @click.stop="fetchUserTopLists"
+      >
         Add to Top List
       </v-btn>
     </v-card-actions>
@@ -32,7 +41,7 @@
             <v-list-item
               v-for="topList in userTopLists"
               :key="topList.id"
-              @click="addMovieToTopList(topList)"
+              @click.stop="addMovieToTopList(topList)"
               class="top-list-item"
             >
               {{ topList.name }}
@@ -108,7 +117,7 @@ export default {
       }
     },
     async addMovieToTopList(topList) {
-      // Check if the movie is already in the top list
+     
       if (topList.movieIds.includes(this.movieId)) {
         alert(`"${this.title}" is already in "${topList.name}"`);
         return;
@@ -118,7 +127,7 @@ export default {
         await axios.put(
           `http://localhost:5205/api/toplist/${topList.id}/update`,
           {
-            movieIds: [...topList.movieIds, this.movieId], 
+            movieIds: [...topList.movieIds, this.movieId],
           },
           {
             headers: {
@@ -139,18 +148,23 @@ export default {
 
 <style scoped>
 .movie-card {
-  width: 300px; 
+  width: 300px;
   margin: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; 
+  justify-content: space-between;
+}
+
+.movie-poster-link {
+  text-decoration: none;
+  display: block;
 }
 
 .movie-poster {
   width: 100%;
-  height: 200px; 
+  height: 200px;
   background-color: #f5f5f5;
-  object-fit: cover; 
+  object-fit: cover;
   border-bottom: 1px solid #ddd;
 }
 
@@ -159,6 +173,7 @@ export default {
   font-weight: bold;
   margin: 10px 0 5px;
   text-align: center;
+  white-space: normal; 
 }
 
 .movie-genre {
@@ -168,14 +183,8 @@ export default {
   margin-bottom: 10px;
 }
 
-.movie-card p {
-  margin: 4px 0;
-  font-size: 14px;
-}
-
-v-card-actions {
+.card-actions {
   margin-top: auto;
-  padding: 10px 0;
 }
 
 v-btn {
