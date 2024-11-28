@@ -53,14 +53,25 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <!-- Alert Dialog -->
+    <AlertDialog
+      v-model="alertDialogVisible"
+      :message="alertDialogMessage"
+    />
   </v-card>
 </template>
 
+
 <script>
 import axios from "axios";
+import AlertDialog from "@/components/AlertDialog.vue";
 
 export default {
   name: "MovieCard",
+  components: {
+    AlertDialog, 
+  },
   props: {
     title: {
       type: String,
@@ -91,6 +102,8 @@ export default {
     return {
       topListDialog: false,
       userTopLists: [],
+      alertDialogVisible: false, 
+      alertDialogMessage: "", 
     };
   },
   computed: {
@@ -113,13 +126,12 @@ export default {
         this.topListDialog = true; // Open the dialog
       } catch (error) {
         console.error("Error fetching user top lists:", error);
-        alert("Failed to load top lists. Please try again.");
+        this.showAlert("Failed to load top lists. Please try again.");
       }
     },
     async addMovieToTopList(topList) {
-     
       if (topList.movieIds.includes(this.movieId)) {
-        alert(`"${this.title}" is already in "${topList.name}"`);
+        this.showAlert(`"${this.title}" is already in "${topList.name}"`);
         return;
       }
 
@@ -135,16 +147,21 @@ export default {
             },
           }
         );
-        alert(`"${this.title}" added to "${topList.name}" successfully!`);
+        this.showAlert(`"${this.title}" added to "${topList.name}" successfully!`);
         this.topListDialog = false;
       } catch (error) {
         console.error("Error adding movie to top list:", error);
-        alert("Failed to add movie to top list. Please try again.");
+        this.showAlert("Failed to add movie to top list. Please try again.");
       }
+    },
+    showAlert(message) {
+      this.alertDialogMessage = message;
+      this.alertDialogVisible = true;
     },
   },
 };
 </script>
+
 
 <style scoped>
 .movie-card {

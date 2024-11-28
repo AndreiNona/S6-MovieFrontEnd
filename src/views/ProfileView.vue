@@ -40,12 +40,19 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <!--Alert Dialog -->
+    <AlertDialog 
+      v-model="alertVisible" 
+      :message="alertMessage" 
+    />
   </v-container>
 </template>
 
 <script>
 import TopLists from "@/components/TopLists.vue";
 import LoadingRadar from "@/components/LoadingRadar.vue";
+import AlertDialog from "@/components/AlertDialog.vue";
 import axios from "axios";
 
 export default {
@@ -53,25 +60,28 @@ export default {
   components: {
     TopLists,
     LoadingRadar,
+    AlertDialog, 
   },
   data() {
     return {
-      username: "User", 
+      username: "User",
       topLists: [],
-      isLoadingTopLists: true, 
-      createTopListDialog: false, 
-      newTopListName: "", 
+      isLoadingTopLists: true,
+      createTopListDialog: false,
+      newTopListName: "",
+      alertVisible: false, // For alert dialog visibility
+      alertMessage: "", // For alert dialog message
     };
   },
   async mounted() {
     const token = localStorage.getItem("jwtToken");
     if (token) {
       try {
-        const decodedToken = JSON.parse(atob(token.split(".")[1])); 
-        this.username = decodedToken.sub || "User"; 
+        const decodedToken = JSON.parse(atob(token.split(".")[1]));
+        this.username = decodedToken.sub || "User";
       } catch (error) {
         console.error("Error decoding JWT token:", error);
-        this.username = "User"; 
+        this.username = "User";
       }
     }
 
@@ -98,20 +108,24 @@ export default {
     },
     closeCreateTopListDialog() {
       this.createTopListDialog = false;
-      this.newTopListName = ""; 
+      this.newTopListName = "";
+    },
+    showAlert(message) {
+      this.alertMessage = message;
+      this.alertVisible = true;
     },
     async createTopList() {
       if (!this.newTopListName) {
-        alert("Top List name cannot be empty!");
+        this.showAlert("Top List name cannot be empty!");
         return;
       }
 
       try {
-        const response = await axios.post(
+        await axios.post(
           "http://localhost:5205/api/toplist/create",
           {
             name: this.newTopListName,
-            movieIds: [], 
+            movieIds: [],
           },
           {
             headers: {
@@ -120,17 +134,13 @@ export default {
           }
         );
 
-        this.topLists.push({
-          ...response.data,
-          movieIds: response.data.movieIds || [], 
-          movies: [], 
-        });
+        this.showAlert("Top List created successfully!");
 
-        alert("Top List created successfully!");
-        this.closeCreateTopListDialog();
+        // Reload the page after successful creation TODO: reload component on the fly
+        window.location.reload();
       } catch (error) {
         console.error("Error creating top list:", error);
-        alert("Failed to create Top List. Please try again.");
+        this.showAlert("Failed to create Top List. Please try again.");
       }
     },
     async removeTopList(index) {
@@ -143,12 +153,12 @@ export default {
               Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
             },
           });
-          this.fetchTopLists(); 
-          alert("Top List deleted successfully!");
+          await this.fetchTopLists();
+          this.showAlert("Top List deleted successfully!");
         }
       } catch (error) {
         console.error("Error deleting top list:", error);
-        alert("Failed to delete Top List. Please try again.");
+        this.showAlert("Failed to delete Top List. Please try again.");
       }
     },
     editTopList(topListId) {

@@ -10,17 +10,17 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: LoginRegister, // Home page for login/register
+    component: LoginRegister, 
   },
   {
     path: "/movies",
     name: "Movies",
-    component: MovieView, // Movie search and list
+    component: MovieView, 
   },
   {
     path: "/people",
     name: "People",
-    component: PeopleView, // People search and list (was ActorView)
+    component: PeopleView, 
   },
   {
     path: "/profile",
@@ -32,7 +32,7 @@ const routes = [
     path: "/toplist/:id/edit",
     name: "TopListEdit",
     component: TopListEditView,
-    props: true, // Pass route parameters as props
+    props: true, 
   },
   {
     path: "/movie/:id",

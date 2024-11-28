@@ -7,7 +7,11 @@ module.exports = {
     './node_modules/flowbite/**/*.js'
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Roboto Condensed', 'sans-serif'], // Replace the default sans font
+      },
+    },
   },
   plugins: [
     require('flowbite/plugin')
