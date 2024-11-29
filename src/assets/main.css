@@ -3,4 +3,13 @@
 @tailwind components;
 @tailwind utilities;
 
-
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #121212; /* Dark background (not working) */
+    color: #000;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }

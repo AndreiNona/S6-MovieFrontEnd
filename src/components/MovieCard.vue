@@ -14,12 +14,21 @@
     </router-link>
 
     <!-- Movie Details -->
-    <v-card-title class="movie-title">{{ title }}</v-card-title>
-    <v-card-subtitle v-if="genre" class="movie-genre">Genre: {{ genre }}</v-card-subtitle>
-    <v-card-text>
-      <p v-if="year"><strong>Year:</strong> {{ year }}</p>
-      <p v-if="rating"><strong>Rating:</strong> {{ rating }}</p>
-    </v-card-text>
+    <v-card-title class="movie-title">
+      <div class="title-text">{{ title }}</div>
+      <span class="movie-rating">
+        {{ displayRating }}
+      </span>
+    </v-card-title>
+
+    <v-card-subtitle class="movie-details">
+      <div v-if="genre && genre !== 'Unknown' && genre !== 'N/A'">
+        <strong>Genre:</strong> {{ genre }}
+      </div>
+      <div v-if="year && year !== 'N/A'">
+        <strong>Year:</strong> {{ year }}
+      </div>
+    </v-card-subtitle>
 
     <!-- Add to Top List Button -->
     <v-card-actions>
@@ -61,6 +70,8 @@
     />
   </v-card>
 </template>
+
+
 
 
 <script>
@@ -110,6 +121,9 @@ export default {
     defaultPoster() {
       return "/images/noPoserAvailable.png";
     },
+    displayRating() {
+      return this.rating && this.rating !== "N/A" ? this.rating : "No rating";
+    },
   },
   methods: {
     isValidPoster(poster) {
@@ -125,8 +139,12 @@ export default {
         this.userTopLists = response.data;
         this.topListDialog = true; // Open the dialog
       } catch (error) {
-        console.error("Error fetching user top lists:", error);
-        this.showAlert("Failed to load top lists. Please try again.");
+        if (error.response && error.response.status === 401) {
+          this.showAlert("You can't add a top list while not logged in.");
+        } else {
+          console.error("Error fetching user top lists:", error);
+          this.showAlert("Failed to load top lists. Please try again.");
+        }
       }
     },
     async addMovieToTopList(topList) {
@@ -150,8 +168,12 @@ export default {
         this.showAlert(`"${this.title}" added to "${topList.name}" successfully!`);
         this.topListDialog = false;
       } catch (error) {
-        console.error("Error adding movie to top list:", error);
-        this.showAlert("Failed to add movie to top list. Please try again.");
+        if (error.response && error.response.status === 401) {
+          this.showAlert("Unauthorized action. Please log in again.");
+        } else {
+          console.error("Error adding movie to top list:", error);
+          this.showAlert("Failed to add movie to top list. Please try again.");
+        }
       }
     },
     showAlert(message) {
@@ -162,14 +184,17 @@ export default {
 };
 </script>
 
-
 <style scoped>
 .movie-card {
-  width: 300px;
+  width: 320px;
   margin: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #000; 
+  color: #fff; 
 }
 
 .movie-poster-link {
@@ -179,33 +204,56 @@ export default {
 
 .movie-poster {
   width: 100%;
-  height: 200px;
-  background-color: #f5f5f5;
+  height: 250px;
   object-fit: cover;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 2px solid #444; 
 }
 
 .movie-title {
-  font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
   font-weight: bold;
-  margin: 10px 0 5px;
-  text-align: center;
-  white-space: normal; 
+  margin: 10px;
+  text-align: left;
+  white-space: normal;
+  word-wrap: break-word;
+  color: #fff; /* Ensure title text is visible */
 }
 
-.movie-genre {
+.movie-rating {
+  color: #2196f3; /* Blue color for rating */
+  font-weight: bold;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+
+.movie-details {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #ccc; /* Light gray for subtle contrast */
+  margin: 0 10px 10px;
+}
+
+.movie-footer {
   font-size: 14px;
   color: gray;
-  text-align: center;
-  margin-bottom: 10px;
+  margin: 0 10px;
+  display: flex;
+  justify-content: space-between;
 }
 
-.card-actions {
-  margin-top: auto;
+.footer-item {
+  flex: 1;
+  text-align: left;
 }
 
-v-btn {
+.v-btn {
   text-transform: uppercase;
   font-weight: bold;
+  background-color: #333; /* Dark button background for consistency */
+  color: #fff; /* White text */
 }
 </style>

@@ -11,6 +11,8 @@ import ConfirmDialog from "@/components/ConfirmDialog.vue"; // ConfirmDialog Com
 
 import router from './router'; // Vue Router setup
 
+import './assets/main.css'; //Not working for some reason
+
 const vuetify = createVuetify({
   components,
   directives,
