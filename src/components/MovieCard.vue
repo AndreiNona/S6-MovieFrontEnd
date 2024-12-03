@@ -131,7 +131,7 @@ export default {
     },
     async fetchUserTopLists() {
       try {
-        const response = await axios.get("http://localhost:5205/api/toplist/my-toplists", {
+        const response = await axios.get("https://movieapi-app.azurewebsites.net/api/toplist/my-toplists", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
           },
@@ -155,7 +155,7 @@ export default {
 
       try {
         await axios.put(
-          `http://localhost:5205/api/toplist/${topList.id}/update`,
+          `https://movieapi-app.azurewebsites.net/api/toplist/${topList.id}/update`,
           {
             movieIds: [...topList.movieIds, this.movieId],
           },

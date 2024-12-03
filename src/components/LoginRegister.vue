@@ -64,7 +64,7 @@ export default {
     const showAlert = ref(false);
     const alertMessage = ref('');
 
-    const baseUrl = 'http://localhost:5205/api/Auth';
+    const baseUrl = 'https://movieapi-app.azurewebsites.net/api/Auth';
 
     const toggleForm = () => {
       isLogin.value = !isLogin.value;

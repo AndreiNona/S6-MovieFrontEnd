@@ -155,7 +155,7 @@ export default {
     async fetchDirectors() {
       try {
         const { id } = this.$route.params;
-        const response = await axios.get(`http://localhost:5205/api/Movies/${id}/directors`);
+        const response = await axios.get(`https://movieapi-app.azurewebsites.net/api/Movies/${id}/directors`);
         this.directors = response.data;
       } catch (error) {
         console.error("Error fetching directors:", error);
@@ -164,7 +164,7 @@ export default {
     async fetchActors() {
       try {
         const { id } = this.$route.params;
-        const response = await axios.get(`http://localhost:5205/api/Movies/${id}/stars`);
+        const response = await axios.get(`https://movieapi-app.azurewebsites.net/api/Movies/${id}/stars`);
         this.actors = response.data;
       } catch (error) {
         console.error("Error fetching actors:", error);
@@ -188,7 +188,7 @@ export default {
       const { id } = this.$route.params;
 
       // Fetch movie details
-      const movieResponse = await axios.get(`http://localhost:5205/api/movies/omdb/${id}`);
+      const movieResponse = await axios.get(`https://movieapi-app.azurewebsites.net/api/movies/omdb/${id}`);
       this.movieDetails = movieResponse.data;
 
       // Fetch directors and actors

@@ -134,7 +134,7 @@ export default {
     );
 
     // API Base URL
-    const apiBaseUrl = "http://localhost:5205/api/Auth";
+    const apiBaseUrl = "https://movieapi-app.azurewebsites.net/api/Auth";
 
     const showAlert = (title, message) => {
       alertTitle.value = title;

@@ -118,7 +118,7 @@
         const { id } = this.$route.params;
   
         // Fetch top list details
-        const response = await axios.get(`http://localhost:5205/api/toplist/${id}`, {
+        const response = await axios.get(`https://movieapi-app.azurewebsites.net/api/toplist/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
           },
@@ -139,7 +139,7 @@
         try {
           this.movies = await Promise.all(
             this.movieIds.map(async (movieId) => {
-              const response = await axios.get(`http://localhost:5205/api/movies/omdb/${movieId}`);
+              const response = await axios.get(`https://movieapi-app.azurewebsites.net/api/movies/omdb/${movieId}`);
               return response.data;
             })
           );
@@ -150,7 +150,7 @@
       async searchMovies() {
         try {
           const response = await axios.get(
-            `http://localhost:5205/api/movies/name/${this.searchQuery}?smartSearch=true&wordComplete=true&limit=10&includeOmdbDetails=true`
+            `https://movieapi-app.azurewebsites.net/api/movies/name/${this.searchQuery}?smartSearch=true&wordComplete=true&limit=10&includeOmdbDetails=true`
           );
           this.searchResults = response.data;
         } catch (error) {
@@ -182,7 +182,7 @@
         try {
           const { id } = this.$route.params;
           await axios.put(
-            `http://localhost:5205/api/toplist/${id}/update`,
+            `https://movieapi-app.azurewebsites.net/api/toplist/${id}/update`,
             { movieIds: this.movieIds },
             {
               headers: {

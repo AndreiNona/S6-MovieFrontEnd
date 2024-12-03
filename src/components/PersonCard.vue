@@ -67,7 +67,7 @@ export default {
       }
     },
     async fetchRoleAndMovies() {
-      const baseUrl = "http://localhost:5205/api/people";
+      const baseUrl = "https://movieapi-app.azurewebsites.net/api/people";
       try {
         const response = await fetch(`${baseUrl}/${this.personId}/role`);
         const data = await response.json();

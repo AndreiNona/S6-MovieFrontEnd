@@ -71,7 +71,7 @@ export default {
     async searchPeople() {
       try {
         const response = await axios.get(
-          `http://localhost:5205/api/people/name/${this.searchQuery}?maxResults=${this.maxResults}`
+          `https://movieapi-app.azurewebsites.net/api/people/name/${this.searchQuery}?maxResults=${this.maxResults}`
         );
         this.people = response.data;
         console.log("Search Results:", this.people);

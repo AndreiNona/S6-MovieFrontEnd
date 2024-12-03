@@ -90,7 +90,7 @@
   
         try {
           const response = await axios.get(
-            `http://localhost:5205/api/movies/name/${this.searchQuery}?limit=50`
+            `https://movieapi-app.azurewebsites.net/api/movies/name/${this.searchQuery}?limit=50`
           );
           this.searchResults = response.data;
         } catch (error) {

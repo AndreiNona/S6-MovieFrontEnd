@@ -102,7 +102,7 @@ export default {
 
         for (const movieId of topList.movieIds.slice(0, 3)) {
           try {
-            const response = await fetch(`http://localhost:5205/api/movies/omdb/${movieId}`);
+            const response = await fetch(`https://movieapi-app.azurewebsites.net/api/movies/omdb/${movieId}`);
             const data = await response.json();
             topList.movieTitles.push(data.title);
 
@@ -153,7 +153,7 @@ export default {
     },
     async deleteTopList(topListId) {
       try {
-        await fetch(`http://localhost:5205/api/toplist/${topListId}`, {
+        await fetch(`https://movieapi-app.azurewebsites.net/api/toplist/${topListId}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,

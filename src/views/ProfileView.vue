@@ -91,7 +91,7 @@ export default {
     async fetchTopLists() {
       try {
         this.isLoadingTopLists = true;
-        const response = await axios.get("http://localhost:5205/api/toplist/my-toplists", {
+        const response = await axios.get("https://movieapi-app.azurewebsites.net/api/toplist/my-toplists", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
           },
@@ -122,7 +122,7 @@ export default {
 
       try {
         await axios.post(
-          "http://localhost:5205/api/toplist/create",
+          "https://movieapi-app.azurewebsites.net/api/toplist/create",
           {
             name: this.newTopListName,
             movieIds: [],
@@ -148,7 +148,7 @@ export default {
         const topList = this.topLists[index];
         const confirmDelete = confirm(`Are you sure you want to delete "${topList.name}"?`);
         if (confirmDelete) {
-          await axios.delete(`http://localhost:5205/api/toplist/${topList.id}`, {
+          await axios.delete(`https://movieapi-app.azurewebsites.net/api/toplist/${topList.id}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
             },

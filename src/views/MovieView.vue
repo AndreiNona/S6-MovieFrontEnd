@@ -218,7 +218,7 @@ export default {
       this.formattedYearRange = "";
     },
     async searchMovies() {
-      const baseUrl = "http://localhost:5205/api/movies";
+      const baseUrl = "https://movieapi-app.azurewebsites.net/api/movies";
       const includeOmdbDetails = true;
       let response;
 
