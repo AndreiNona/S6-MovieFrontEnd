@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <h2>Your Top Lists</h2>
-    <p v-if="topLists.length === 0">You have no top lists yet.</p>
+    <p v-if="topLists.length === 0" class="no-top-lists">You have no top lists yet.</p>
     <v-row v-else>
       <v-col
         v-for="(topList, index) in topLists"
@@ -21,7 +21,7 @@
           </v-btn>
 
           <!-- Top List Name -->
-          <v-card-title>{{ topList.name }}</v-card-title>
+          <v-card-title class="top-list-title">{{ topList.name }}</v-card-title>
 
           <!-- Movie Posters -->
           <div class="poster-container" v-if="topList.movies && topList.movies.length > 0">
@@ -36,7 +36,7 @@
           <div v-else class="loading-placeholder">Loading posters...</div>
 
           <!-- Movie Titles -->
-          <v-card-text>
+          <v-card-text class="movie-titles">
             <ol>
               <li v-for="(title, idx) in topList.movieTitles" :key="idx">
                 {{ title }}
@@ -47,8 +47,8 @@
 
           <!-- Bottom Actions -->
           <v-card-actions class="bottom-actions">
-            <v-btn text @click="navigateToEditTopList(topList)">Edit</v-btn>
-            <v-btn icon @click="navigateToMovies">
+            <v-btn text color="primary" @click="navigateToEditTopList(topList)">Edit</v-btn>
+            <v-btn icon color="primary" @click="navigateToMovies">
               <v-icon>mdi-plus</v-icon>
             </v-btn>
           </v-card-actions>
@@ -87,11 +87,11 @@ export default {
   },
   data() {
     return {
-      alertVisible: false, // Alert dialog visibility
-      alertMessage: "", // Alert dialog message
-      confirmVisible: false, // Confirm dialog visibility
-      confirmMessage: "", // Confirm dialog message
-      confirmCallback: null, // Callback function for confirm action
+      alertVisible: false, 
+      alertMessage: "", 
+      confirmVisible: false, 
+      confirmMessage: "", 
+      confirmCallback: null, 
     };
   },
   methods: {
@@ -176,77 +176,96 @@ export default {
 };
 </script>
 
-  <style scoped>
-  .top-list-card {
-    position: relative;
-    padding: 10px;
-    margin: 10px;
-    max-width: 350px;
-    min-height: 450px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  
-  .poster-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
-    position: relative;
-    overflow: hidden;
-    height: 200px;
-    width: 100%;
-  }
-  
-  .movie-poster {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    position: absolute;
-    animation: slide-in 0.5s ease-out forwards;
-  }
-  
-  @keyframes slide-in {
-    0% {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-    100% {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-  
-  .delete-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: white;
-    border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    z-index: 10;
-  }
-  
-  .bottom-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .bottom-actions .v-btn:last-child {
-    margin-left: auto;
-  }
-  
-  .total-movies {
-    text-align: right;
-    font-weight: bold;
-  }
-  
-  .loading-placeholder {
-    text-align: center;
-    font-style: italic;
-    color: gray;
-  }
-  </style>
+<style scoped>
+/* General Container */
+.v-container {
+  background-color: #121212;
+  color: #f0f0f0;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Top List Card */
+.top-list-card {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.top-list-title {
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+/* Poster Container */
+.poster-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.movie-poster {
+  width: 80px;
+  height: 120px;
+  object-fit: cover;
+  border: 1px solid #444;
+  border-radius: 5px;
+}
+
+/* Movie Titles */
+.movie-titles ol {
+  padding-left: 20px;
+  list-style-type: decimal;
+}
+
+.movie-titles li {
+  color: #f0f0f0;
+  margin-bottom: 5px;
+}
+
+.total-movies {
+  text-align: right;
+  font-weight: bold;
+  color: #ffd700;
+  margin-top: 10px;
+}
+
+/* Buttons */
+.delete-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  color: #f0f0f0;
+  z-index: 10;
+}
+
+.delete-button:hover {
+  color: #ff0000;
+}
+
+.bottom-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.v-btn {
+  background-color: #333;
+  color: #f0f0f0;
+}
+
+.v-btn:hover {
+  background-color: #444;
+}
+</style>
+
   

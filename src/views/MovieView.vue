@@ -85,7 +85,7 @@
                 </div>
                 <div class="year-picker-actions">
                   <v-btn text class="clear-button" @click="clearYearSelection">Clear</v-btn>
-                  <v-btn text class="close-button" @click="menu = false">Close</v-btn>
+                  <v-btn text class="close-button" @click="menu = false">Confirm</v-btn>
                 </div>
               </div>
             </template>

@@ -78,13 +78,6 @@
       <router-view />
     </v-main>
 
-    <!-- Test Protected Endpoint -->
-    <v-container class="mt-5" v-if="isAuthenticated">
-      <v-btn color="primary" @click="testProtectedEndpoint">
-        Test Protected Endpoint
-      </v-btn>
-    </v-container>
-
     <!-- Login/Register Dialog -->
     <LoginRegister v-model="dialog" v-if="dialog" @authenticated="handleAuthenticated" />
 
@@ -102,10 +95,8 @@
 <script>
 
 import { ref, computed, onMounted } from "vue";
-import axios from "axios";
 import LoginRegister from "./components/LoginRegister.vue";
 import AlertDialog from "./components/AlertDialog.vue";
-import config from "@/config.js";
 
 
 export default {
@@ -135,8 +126,7 @@ export default {
       menuItems.filter((item) => !(item.requiresAuth && !isAuthenticated.value))
     );
 
-    // API Base URL
-    const apiBaseUrl = `${config.apiBaseUrl}/api/Auth`;
+
 
     const showAlert = (title, message) => {
       alertTitle.value = title;
@@ -159,21 +149,6 @@ export default {
       }
     };
 
-    const testProtectedEndpoint = async () => {
-      try {
-        const token = localStorage.getItem("jwtToken");
-        const response = await axios.get(`${apiBaseUrl}/protected-endpoint`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        showAlert("Protected Endpoint", `Response: ${response.data}`);
-      } catch (error) {
-        console.error("Error accessing protected endpoint:", error);
-        showAlert("Error", "Failed to access the protected endpoint.");
-      }
-    };
-
     const openLogin = () => {
       dialog.value = true;
       drawer.value = false;
@@ -191,7 +166,6 @@ export default {
       dialog,
       logout,
       handleAuthenticated,
-      testProtectedEndpoint,
       alertDialogVisible,
       alertTitle,
       alertMessage,

@@ -3,7 +3,7 @@
     <h1>Profile</h1>
     <p>Hello {{ username }}</p>
 
-    <v-btn color="primary" @click="openCreateTopListDialog">Create Top List</v-btn>
+    <v-btn color="#b59902" @click="openCreateTopListDialog">Create Top List</v-btn>
 
     <!-- Loading Spinner -->
     <div v-if="isLoadingTopLists" class="loading-message">
@@ -70,8 +70,8 @@ export default {
       isLoadingTopLists: true,
       createTopListDialog: false,
       newTopListName: "",
-      alertVisible: false, // For alert dialog visibility
-      alertMessage: "", // For alert dialog message
+      alertVisible: false, 
+      alertMessage: "", 
     };
   },
   async mounted() {
