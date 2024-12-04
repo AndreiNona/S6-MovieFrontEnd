@@ -73,7 +73,7 @@
 <script>
 import AlertDialog from "@/components/AlertDialog.vue";
 import ConfirmDialog from "@/components/ConfirmDialog.vue";
-
+import config from "@/config.js"; 
 export default {
   props: {
     topLists: {
@@ -102,7 +102,8 @@ export default {
 
         for (const movieId of topList.movieIds.slice(0, 3)) {
           try {
-            const response = await fetch(`https://movieapi-app.azurewebsites.net/api/movies/omdb/${movieId}`);
+            const baseUrl = config.apiBaseUrl;
+            const response = await fetch(`${baseUrl}/api/movies/omdb/${movieId}`);
             const data = await response.json();
             topList.movieTitles.push(data.title);
 
@@ -153,7 +154,8 @@ export default {
     },
     async deleteTopList(topListId) {
       try {
-        await fetch(`https://movieapi-app.azurewebsites.net/api/toplist/${topListId}`, {
+        const baseUrl = config.apiBaseUrl;
+        await fetch(`${baseUrl}/api/toplist/${topListId}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -174,9 +176,6 @@ export default {
 };
 </script>
 
-
-  
-  
   <style scoped>
   .top-list-card {
     position: relative;

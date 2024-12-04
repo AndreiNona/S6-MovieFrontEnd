@@ -118,6 +118,7 @@
 <script>
 import axios from "axios";
 import MovieCard from "@/components/MovieCard.vue";
+import config from "@/config.js"; 
 
 export default {
   name: "PersonDetailsView",
@@ -144,8 +145,8 @@ export default {
   async mounted() {
     try {
       const { id } = this.$route.params;
-
-      const personResponse = await axios.get(`https://movieapi-app.azurewebsites.net/api/People/${id}/role`);
+      const baseUrl = config.apiBaseUrl;
+      const personResponse = await axios.get(`${baseUrl}/api/People/${id}/role`);
       this.personDetails = personResponse.data;
 
       if (personResponse.data.directedMovies) {
@@ -156,7 +157,7 @@ export default {
         this.starredMovies = await this.fetchMovieDetails(personResponse.data.starredMovies);
       }
 
-      const ratingsResponse = await axios.get(`https://movieapi-app.azurewebsites.net/api/People/${id}/average-ratings`);
+      const ratingsResponse = await axios.get(`${baseUrl}/api/People/${id}/average-ratings`);
       this.averageRatings = ratingsResponse.data;
     } catch (error) {
       console.error("Error fetching person details or movies:", error);
@@ -166,9 +167,10 @@ export default {
   methods: {
     async fetchMovieDetails(movies) {
       try {
+        const baseUrl = config.apiBaseUrl;
         const detailedMovies = await Promise.all(
           movies.map(async (movie) => {
-            const response = await axios.get(`https://movieapi-app.azurewebsites.net/api/movies/omdb/${movie.id}`);
+            const response = await axios.get(`${baseUrl}/api/movies/omdb/${movie.id}`);
             return response.data;
           })
         );

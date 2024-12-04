@@ -134,6 +134,7 @@
 import LoadingRadar from "@/components/LoadingRadar.vue";
 import MovieCard from "@/components/MovieCard.vue";
 import axios from "axios";
+import config from "@/config.js"; 
 
 export default {
   name: "MovieView",
@@ -218,7 +219,7 @@ export default {
       this.formattedYearRange = "";
     },
     async searchMovies() {
-      const baseUrl = "https://movieapi-app.azurewebsites.net/api/movies";
+      const baseUrl = config.apiBaseUrl; 
       const includeOmdbDetails = true;
       let response;
 
@@ -228,24 +229,24 @@ export default {
         if (this.searchQuery && this.selectedYearRange.length > 0) {
           const expandedLimit = 50;
           response = await axios.get(
-            `${baseUrl}/name/${this.searchQuery}?smartSearch=true&wordComplete=true&limit=${expandedLimit}&includeOmdbDetails=${includeOmdbDetails}`
+            `${baseUrl}/api/Movies/name/${this.searchQuery}?smartSearch=true&wordComplete=true&limit=${expandedLimit}&includeOmdbDetails=${includeOmdbDetails}`
           );
           const filteredResults = this.filterMoviesByYear(response.data, this.selectedYearRange);
           this.movies = filteredResults.slice(0, this.limit).map(this.cleanMovieData);
         } else if (this.searchQuery) {
           response = await axios.get(
-            `${baseUrl}/name/${this.searchQuery}?smartSearch=true&wordComplete=true&limit=${this.limit}&includeOmdbDetails=${includeOmdbDetails}`
+            `${baseUrl}/api/Movies/name/${this.searchQuery}?smartSearch=true&wordComplete=true&limit=${this.limit}&includeOmdbDetails=${includeOmdbDetails}`
           );
           this.movies = response.data.map(this.cleanMovieData);
         } else if (this.selectedYearRange.length > 0) {
           if (this.selectedYearRange.length === 1) {
             response = await axios.get(
-              `${baseUrl}/year/${this.selectedYearRange[0]}?limit=${this.limit}&includeOmdbDetails=${includeOmdbDetails}`
+              `${baseUrl}/api/Movies/year/${this.selectedYearRange[0]}?limit=${this.limit}&includeOmdbDetails=${includeOmdbDetails}`
             );
           } else if (this.selectedYearRange.length === 2) {
             const [start, end] = this.selectedYearRange;
             response = await axios.get(
-              `${baseUrl}/range?start=${start}&end=${end}&limit=${this.limit}&includeOmdbDetails=${includeOmdbDetails}`
+              `${baseUrl}/api/Movies/range?start=${start}&end=${end}&limit=${this.limit}&includeOmdbDetails=${includeOmdbDetails}`
             );
           }
           this.movies = response.data.map(this.cleanMovieData);
@@ -274,7 +275,6 @@ export default {
         // Single Year
         return movies.filter((movie) => movie.year === selectedYearRange[0]);
       } else if (selectedYearRange.length === 2) {
-        // Year Range
         const [start, end] = selectedYearRange;
         return movies.filter((movie) => movie.year >= start && movie.year <= end);
       }
@@ -283,6 +283,7 @@ export default {
   },
 };
 </script>
+
 
 
 <style scoped>

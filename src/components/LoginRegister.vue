@@ -42,6 +42,7 @@
 import { ref, watch } from 'vue';
 import axios from 'axios';
 import AlertDialog from './AlertDialog.vue';
+import config from "@/config.js";
 
 export default {
   name: 'LoginRegister',
@@ -64,7 +65,7 @@ export default {
     const showAlert = ref(false);
     const alertMessage = ref('');
 
-    const baseUrl = 'https://movieapi-app.azurewebsites.net/api/Auth';
+    const baseUrl = `${config.apiBaseUrl}/api/Auth`;
 
     const toggleForm = () => {
       isLogin.value = !isLogin.value;

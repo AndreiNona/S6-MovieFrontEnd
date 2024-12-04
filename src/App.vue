@@ -75,7 +75,7 @@
 
     <!-- Main Content -->
     <v-main>
-      <router-view /> <!-- This is where the routed components will render -->
+      <router-view />
     </v-main>
 
     <!-- Test Protected Endpoint -->
@@ -105,6 +105,8 @@ import { ref, computed, onMounted } from "vue";
 import axios from "axios";
 import LoginRegister from "./components/LoginRegister.vue";
 import AlertDialog from "./components/AlertDialog.vue";
+import config from "@/config.js";
+
 
 export default {
   name: "App",
@@ -134,7 +136,7 @@ export default {
     );
 
     // API Base URL
-    const apiBaseUrl = "https://movieapi-app.azurewebsites.net/api/Auth";
+    const apiBaseUrl = `${config.apiBaseUrl}/api/Auth`;
 
     const showAlert = (title, message) => {
       alertTitle.value = title;

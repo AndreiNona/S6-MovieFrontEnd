@@ -54,6 +54,7 @@ import TopLists from "@/components/TopLists.vue";
 import LoadingRadar from "@/components/LoadingRadar.vue";
 import AlertDialog from "@/components/AlertDialog.vue";
 import axios from "axios";
+import config from "@/config.js"; 
 
 export default {
   name: "ProfileView",
@@ -91,7 +92,8 @@ export default {
     async fetchTopLists() {
       try {
         this.isLoadingTopLists = true;
-        const response = await axios.get("https://movieapi-app.azurewebsites.net/api/toplist/my-toplists", {
+        const baseUrl = config.apiBaseUrl;
+        const response = await axios.get(`${baseUrl}/api/toplist/my-toplists`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
           },
@@ -121,8 +123,9 @@ export default {
       }
 
       try {
+        const baseUrl = config.apiBaseUrl;
         await axios.post(
-          "https://movieapi-app.azurewebsites.net/api/toplist/create",
+          `${baseUrl}/api/toplist/create`,
           {
             name: this.newTopListName,
             movieIds: [],
@@ -144,11 +147,12 @@ export default {
       }
     },
     async removeTopList(index) {
+      const baseUrl = config.apiBaseUrl;
       try {
         const topList = this.topLists[index];
         const confirmDelete = confirm(`Are you sure you want to delete "${topList.name}"?`);
         if (confirmDelete) {
-          await axios.delete(`https://movieapi-app.azurewebsites.net/api/toplist/${topList.id}`, {
+          await axios.delete(`${baseUrl}/api/toplist/${topList.id}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
             },

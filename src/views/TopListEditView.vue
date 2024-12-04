@@ -101,6 +101,7 @@
   
   <script>
   import axios from "axios";
+  import config from "@/config.js"; 
   
   export default {
     name: "TopListEditView",
@@ -116,9 +117,9 @@
     async mounted() {
       try {
         const { id } = this.$route.params;
-  
+        const baseUrl = config.apiBaseUrl;
         // Fetch top list details
-        const response = await axios.get(`https://movieapi-app.azurewebsites.net/api/toplist/${id}`, {
+        const response = await axios.get(`${baseUrl}/api/toplist/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
           },
@@ -137,9 +138,10 @@
     methods: {
       async fetchMovieDetails() {
         try {
+          const baseUrl = config.apiBaseUrl;
           this.movies = await Promise.all(
             this.movieIds.map(async (movieId) => {
-              const response = await axios.get(`https://movieapi-app.azurewebsites.net/api/movies/omdb/${movieId}`);
+              const response = await axios.get(`${baseUrl}/api/movies/omdb/${movieId}`);
               return response.data;
             })
           );
@@ -149,8 +151,9 @@
       },
       async searchMovies() {
         try {
+          const baseUrl = config.apiBaseUrl;
           const response = await axios.get(
-            `https://movieapi-app.azurewebsites.net/api/movies/name/${this.searchQuery}?smartSearch=true&wordComplete=true&limit=10&includeOmdbDetails=true`
+            `${baseUrl}/api/movies/name/${this.searchQuery}?smartSearch=true&wordComplete=true&limit=10&includeOmdbDetails=true`
           );
           this.searchResults = response.data;
         } catch (error) {
@@ -181,8 +184,9 @@
       async confirmChanges() {
         try {
           const { id } = this.$route.params;
+          const baseUrl = config.apiBaseUrl;
           await axios.put(
-            `https://movieapi-app.azurewebsites.net/api/toplist/${id}/update`,
+            `${baseUrl}/api/toplist/${id}/update`,
             { movieIds: this.movieIds },
             {
               headers: {

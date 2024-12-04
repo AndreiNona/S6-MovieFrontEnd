@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import config from "@/config.js"; 
+
 export default {
   name: "PersonCard",
   props: {
@@ -67,7 +69,7 @@ export default {
       }
     },
     async fetchRoleAndMovies() {
-      const baseUrl = "https://movieapi-app.azurewebsites.net/api/people";
+      const baseUrl = `${config.apiBaseUrl}/api/people`;
       try {
         const response = await fetch(`${baseUrl}/${this.personId}/role`);
         const data = await response.json();

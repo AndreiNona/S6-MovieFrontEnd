@@ -95,6 +95,7 @@
 
 <script>
 import axios from "axios";
+import config from "@/config.js"; 
 
 export default {
   name: "MovieDetailsView",
@@ -155,7 +156,8 @@ export default {
     async fetchDirectors() {
       try {
         const { id } = this.$route.params;
-        const response = await axios.get(`https://movieapi-app.azurewebsites.net/api/Movies/${id}/directors`);
+        const baseUrl = config.apiBaseUrl;
+        const response = await axios.get(`${baseUrl}/api/Movies/${id}/directors`);
         this.directors = response.data;
       } catch (error) {
         console.error("Error fetching directors:", error);
@@ -164,7 +166,8 @@ export default {
     async fetchActors() {
       try {
         const { id } = this.$route.params;
-        const response = await axios.get(`https://movieapi-app.azurewebsites.net/api/Movies/${id}/stars`);
+        const baseUrl = config.apiBaseUrl;
+        const response = await axios.get(`${baseUrl}/api/Movies/${id}/stars`);
         this.actors = response.data;
       } catch (error) {
         console.error("Error fetching actors:", error);
@@ -186,9 +189,9 @@ export default {
   async mounted() {
     try {
       const { id } = this.$route.params;
-
+      const baseUrl = config.apiBaseUrl;
       // Fetch movie details
-      const movieResponse = await axios.get(`https://movieapi-app.azurewebsites.net/api/movies/omdb/${id}`);
+      const movieResponse = await axios.get(`${baseUrl}/api/movies/omdb/${id}`);
       this.movieDetails = movieResponse.data;
 
       // Fetch directors and actors

@@ -77,6 +77,7 @@
 <script>
 import axios from "axios";
 import AlertDialog from "@/components/AlertDialog.vue";
+import config from "@/config.js"; 
 
 export default {
   name: "MovieCard",
@@ -131,7 +132,8 @@ export default {
     },
     async fetchUserTopLists() {
       try {
-        const response = await axios.get("https://movieapi-app.azurewebsites.net/api/toplist/my-toplists", {
+        const baseUrl = config.apiBaseUrl;
+        const response = await axios.get(`${baseUrl}/api/toplist/my-toplists`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
           },
@@ -154,8 +156,9 @@ export default {
       }
 
       try {
+        const baseUrl = config.apiBaseUrl;
         await axios.put(
-          `https://movieapi-app.azurewebsites.net/api/toplist/${topList.id}/update`,
+          `${baseUrl}/api/toplist/${topList.id}/update`,
           {
             movieIds: [...topList.movieIds, this.movieId],
           },

@@ -54,6 +54,7 @@
 <script>
 import PersonCard from "@/components/PersonCard.vue";
 import axios from "axios";
+import config from "@/config.js"; 
 
 export default {
   name: "PeopleView",
@@ -70,8 +71,9 @@ export default {
   methods: {
     async searchPeople() {
       try {
+        const baseUrl = config.apiBaseUrl;
         const response = await axios.get(
-          `https://movieapi-app.azurewebsites.net/api/people/name/${this.searchQuery}?maxResults=${this.maxResults}`
+          `${baseUrl}/api/people/name/${this.searchQuery}?maxResults=${this.maxResults}`
         );
         this.people = response.data;
         console.log("Search Results:", this.people);
